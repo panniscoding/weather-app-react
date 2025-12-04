@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import React from "react";
+import WeatherInfo from "./WeatherInfo";
 import axios from "axios";
 import "./Weather.css";
 
 export default function Weather(props) {
+  const [city, setCity] = useState(props.defaultCity);
   const [weatherData, setWeatherData] = useState({ show: false });
 
   function handleResponse(response) {
@@ -45,28 +46,7 @@ export default function Weather(props) {
           </div>
         </div>
       </form>
-      <h1> New York</h1>
-      <ul>
-        <li>Wednesday 07:00</li>
-        <li>Mostly Cloudy</li>
-      </ul>
-      <div className="row">
-        <div className="col-6">
-          <img
-            src="https://www.gstatic.com/weather/conditions/v1/svg/mostly_cloudy_day_light.svg"
-            alt="Mostly Cloudy"
-          />
-          <span className="temperature">8</span>
-          <span className="unit">°C</span>
-        </div>
-        <div className="col-6">
-          <ul>
-            <li>Precipitation: 19%</li>
-            <li>Humidity: 83%</li>
-            <li>Wind: 10km/h</li>
-          </ul>
-        </div>
-      </div>
+      <WeatherInfo />
     </div>
   );
 }
