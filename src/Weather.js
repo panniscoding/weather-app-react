@@ -21,32 +21,48 @@ export default function Weather(props) {
     });
   }
 
-  const apiKey = "91e4be9d3f0ce62462b88df7804804ae";
-  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-  axios.get(apiUrl).then(handleResponse);
+  function search() {
+    const apiKey = "91e4be9d3f0ce62462b88df7804804ae";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(handleResponse);
+  }
 
-  return (
-    <div className="Weather">
-      <form>
-        <div className="row">
-          <div className="col-9">
-            <input
-              type="search"
-              placeholder="Enter a city"
-              className="form-control"
-              autoFocus="on"
-            />
+  function handleSumit(event) {
+    event.preventDefault();
+    search();
+  }
+
+  function handleCityChange(event) {
+    setCity(event.target.value);
+  }
+
+  if (weatherData.show) {
+    return (
+      <div className="Weather">
+        <form onSubmit={handleSumit}>
+          <div className="row">
+            <div className="col-6">
+              <input
+                type="search"
+                placeholder="Enter a city"
+                className="form-control"
+                onChange={handleCityChange}
+              />
+            </div>
+            <div className="col-3">
+              <input
+                type="submit"
+                value="Search"
+                className="btn btn-primary w-100"
+              />
+            </div>
           </div>
-          <div className="col-3">
-            <input
-              type="submit"
-              value="Search"
-              className="btn btn-primary w-100"
-            />
-          </div>
-        </div>
-      </form>
-      <WeatherInfo />
-    </div>
-  );
+        </form>
+        <WeatherInfo data={weatherData} />
+      </div>
+    );
+  } else {
+    search();
+    return null;
+  }
 }
