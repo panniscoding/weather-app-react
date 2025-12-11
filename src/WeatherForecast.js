@@ -9,43 +9,35 @@ export default function WeatherForecast(props) {
 
   useEffect(() => {
     setLoaded(false);
+    if (!props.coordinates) return;
+
+    const apiKey = "17t3ob19948f5f5bf884a243a9005805";
+    const { longitude, latitude } = props.coordinates; // FIXED: no .data
+    const apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${longitude}&lat=${latitude}&key=${apiKey}&units=metric`;
+
+    axios.get(apiUrl).then((response) => {
+      setForecast(response.data.daily);
+      setLoaded(true);
+    });
   }, [props.coordinates]);
 
-  function handleResponse(response) {
-    setForecast(response.data.daily);
-    setLoaded(true);
-  }
+  if (!loaded) return null;
 
-  function load() {
-    let apiKey = "66197617f1b8dc35f7c7323409cf3cd8";
-    let longitude = props.coordinates.lon;
-    let latitude = props.coordinates.lat;
-    let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
-
-    axios.get(apiUrl).then(handleResponse);
-  }
-
-  if (loaded) {
-    return (
-      <div className="WeatherForecast">
-        <div className="row">
-          {forecast.map(function (dailyForecast, index) {
-            if (index < 5) {
-              return (
-                <div className="col" key={index}>
-                  <WeatherForecastDay data={dailyForecast} />
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })}
-        </div>
+  return (
+    <div className="WeatherForecast">
+      <div className="row">
+        {forecast.map(function (dailyForecast, index) {
+          if (index < 5) {
+            return (
+              <div className="col" key={index}>
+                <WeatherForecastDay data={dailyForecast} />
+              </div>
+            );
+          } else {
+            return null;
+          }
+        })}
       </div>
-    );
-  } else {
-    load();
-
-    return null;
-  }
+    </div>
+  );
 }
